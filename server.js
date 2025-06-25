@@ -4,6 +4,10 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const { OpenAI } = require("openai");
 
+const path = require("path");
+app.use(express.static(path.join(__dirname)));
+
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
