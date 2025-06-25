@@ -1,5 +1,5 @@
 
-async function translate(direction) {
+async function doTranslate(direction) {
   const inputText = document.getElementById("inputText").value;
   if (!inputText.trim()) return;
 
