@@ -13,6 +13,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+console.log("API Key in use:", process.env.OPENAI_API_KEY);
 
 app.post("/api/translate", async (req, res) => {
   const { text, direction } = req.body;
