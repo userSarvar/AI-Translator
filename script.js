@@ -12,7 +12,7 @@ async function translate(direction) {
   const data = await response.json();
   document.getElementById("outputText").value = data.result;
 }
-
+ 
 function copyOutput() {
   const output = document.getElementById("outputText");
   output.select();
