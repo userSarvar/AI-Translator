@@ -24,7 +24,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'openai/gpt-3.5-turbo',
+        model: 'deepseek/deepseek-r1-0528-qwen3-8b:free',
         messages: [
           { role: 'system', content: 'You are a funny but accurate Gen Z translator.' },
           { role: 'user', content: prompt }
