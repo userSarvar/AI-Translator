@@ -1,31 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GenZify Translator</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gen Z Translator</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <button id="toggle-dark" style="position: fixed; top: 10px; right: 10px;">🌓</button>
+  <header class="navbar">
+    <div class="logo">T<span>A</span></div>
+    <nav>
+      <ul>
+        <li><a href="#">All Translators</a></li>
+        <li><a href="#">Translator Creator</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  <div class="container">
-    <h1>GenZify 🌀</h1>
-    <textarea id="inputText" placeholder="Enter your text here..."></textarea>
+  <main class="translator-container">
+    <div class="breadcrumbs">Home → Translators</div>
+    <h1 class="title">Gen Z Translator</h1>
+    <p class="subtitle">Translate from Normal Language into Gen Z</p>
 
-    <div class="buttons">
-      <button onclick="doTranslate('to_genz')">→ Gen Z</button>
-      <button onclick="doTranslate('to_normal')">→ Normal</button>
+    <div class="translator-box">
+      <div class="column">
+        <div class="label">Normal Language</div>
+        <textarea id="inputText" placeholder="Enter text to translate..."></textarea>
+        <button class="translate-btn" onclick="doTranslate('to_genz')">Translate →</button>
+      </div>
+
+      <div class="column">
+        <div class="label">Gen Z</div>
+        <textarea id="outputText" readonly></textarea>
+        <button class="tts-btn">🔊 Text to Speech</button>
+      </div>
     </div>
 
-    <textarea id="outputText" placeholder="Translation will appear here..." readonly></textarea>
+    <p class="disclaimer">
+      Disclaimer: This AI-powered tool is provided solely for entertainment and creative purposes and is not guaranteed to be accurate.
+    </p>
+  </main>
 
-    <div id="loader" style="display: none; text-align: center; padding: 10px;">⏳ Translating...</div>
+  <script>
+    async function doTranslate(direction) {
+      const inputText = document.getElementById("inputText").value;
+      const output = document.getElementById("outputText");
+      output.value = "Translating...";
 
+      const response = await fetch("/api/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: inputText, direction }),
+      });
 
-    <button onclick="copyOutput()">📋 Copy</button>
-  </div>
-
-  <script src="./script.js"></script>
+      const data = await response.json();
+      output.value = data.result;
+    }
+  </script>
 </body>
 </html>
