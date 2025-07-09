@@ -13,9 +13,8 @@ export default async function handler(req, res) {
   }
 
   const prompt = direction === 'to_genz'
-    ? `Translate the following into Gen Z slang:\n\n"${text}"`
-    : `Translate the following Gen Z slang into standard English:\n\n"${text}"`;
-
+    ? `Just translate this into Gen Z slang. Keep it short and clean. No extra commentary:\n\n"${text}"`
+    : `Translate this Gen Z slang to formal English only. No commentary:\n\n"${text}"`;
   try {
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
