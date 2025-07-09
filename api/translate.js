@@ -13,12 +13,12 @@ export default async function handler(req, res) {
   }
 
   const prompt = direction === 'to_genz'
-    ? `Translate the following into a modern Gen Z slang sentence. Use common slang and emojis. Keep the meaning clear and output only the Gen Z version — no extra notes or explanation.
+    ? `Your job is to rephrase the following sentence into current Gen Z slang. Use trendy but widely understood slang, memes, abbreviations, and emojis. The result should sound natural to a Gen Z speaker, be funny if possible, and maintain the original meaning clearly. Do NOT explain or add commentary — output only the Gen Z version in one sentence.
 
-Text: "${text}"`
-    :  `Translate the following Gen Z slang into a single clear, professional English sentence. Do not explain, list options, or add commentary — just provide the translation only.
+Input: "{text}"`
+    :  `You are a formal English translator. Convert the following Gen Z slang into a clear, professional sentence. Do not add commentary or multiple options — return only one accurate, grammatically correct translation that preserves the original meaning in plain English.
 
-Text: "${text}"`;
+Input: "{text}"`;
   try {
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
