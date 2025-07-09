@@ -19,3 +19,7 @@ function copyOutput() {
   document.execCommand("copy");
   alert("Copied to clipboard!");
 }
+
+document.getElementById('toggle-dark').onclick = () => {
+  document.body.classList.toggle('dark-mode');
+};

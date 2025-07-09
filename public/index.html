@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <button id="toggle-dark" style="position: fixed; top: 10px; right: 10px;">🌓</button>
+
   <div class="container">
     <h1>GenZify 🌀</h1>
     <textarea id="inputText" placeholder="Enter your text here..."></textarea>
@@ -17,6 +19,9 @@
     </div>
 
     <textarea id="outputText" placeholder="Translation will appear here..." readonly></textarea>
+
+    <div id="loader" style="display: none; text-align: center; padding: 10px;">⏳ Translating...</div>
+
 
     <button onclick="copyOutput()">📋 Copy</button>
   </div>

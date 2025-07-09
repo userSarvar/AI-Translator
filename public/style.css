@@ -1,61 +1,47 @@
+/* Light Theme (Default) */
+:root {
+  --bg-color: #f9f9f9;
+  --text-color: #333;
+  --header-bg: #003366;
+  --footer-bg: #003366;
+  --card-bg: #fff;
+  --input-bg: #fff;
+  --border-color: #ccc;
+  --highlight: #e8e8e8;
+}
+
+/* Dark Theme */
+body.dark-mode {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --header-bg: #1f1f1f;
+  --footer-bg: #1f1f1f;
+  --card-bg: #1c1c1c;
+  --input-bg: #2a2a2a;
+  --border-color: #444;
+  --highlight: #333;
+}
+
+
+
+
 /* === style.css === */
 body {
-  background-color: #f0f4f8;
-  font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
+  background: var(--bg-color);
+  color: var(--text-color);
 }
 
-.container {
-  width: 90%;
-  max-width: 600px;
-  background: white;
-  padding: 20px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
-  border-radius: 10px;
-  text-align: center;
+.header, .footer {
+  background: var(--header-bg);
 }
 
-h1 {
-  margin-bottom: 20px;
-  font-size: 2em;
-  color: #333;
+.compare-section {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
 }
 
-textarea {
-  width: 100%;
-  height: 120px;
-  margin-bottom: 15px;
-  padding: 10px;
-  font-size: 1em;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  resize: none;
-}
-
-.buttons button {
-  margin: 5px;
-  padding: 10px 20px;
-  font-size: 1em;
-  border: none;
-  background-color: #4f46e5;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.buttons button:hover {
-  background-color: #4338ca;
-}
-
-button:last-of-type {
-  background-color: #10b981;
-  margin-top: 10px;
-}
-
-button:last-of-type:hover {
-  background-color: #059669;
+#uni-input {
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
 }
