@@ -15,10 +15,10 @@ export default async function handler(req, res) {
   const prompt = direction === 'to_genz'
     ? `Your job is to rephrase the following sentence into current Gen Z slang. Use trendy but widely understood slang, memes, abbreviations, and emojis. The result should sound natural to a Gen Z speaker, be funny if possible, and maintain the original meaning clearly. Do NOT explain or add commentary — output only the Gen Z version in one sentence.
 
-Input: "{text}"`
+Input: "${text}"`
     :  `You are a formal English translator. Convert the following Gen Z slang into a clear, professional sentence. Do not add commentary or multiple options — return only one accurate, grammatically correct translation that preserves the original meaning in plain English.
 
-Input: "{text}"`;
+Input: "${text}"`;
   try {
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -29,7 +29,8 @@ Input: "{text}"`;
       body: JSON.stringify({
         model: 'deepseek/deepseek-r1-0528-qwen3-8b:free',
         messages: [
-          { role: 'system', content: 'You are a funny but accurate Gen Z translator.' },
+{ role: "system", content: "You are a precise translator who always returns one accurate sentence without adding comments or choices." },
+
           { role: 'user', content: prompt }
         ]
       })
@@ -40,7 +41,7 @@ Input: "{text}"`;
     // ✅ Defensive check: OpenRouter might fail or quota might be exceeded
     if (!data || !data.choices || !data.choices[0] || !data.choices[0].message) {
       console.error('Invalid API response:', data);
-      return res.status(500).json({ result: "Translation failed. Try again later." });
+      return res.status(500).json({ result: "Somethign went wrong. Try again later." });
     }
 
     const reply = data.choices[0].message.content;
