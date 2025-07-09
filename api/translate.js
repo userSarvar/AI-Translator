@@ -13,10 +13,10 @@ export default async function handler(req, res) {
   }
 
   const prompt = direction === 'to_genz'
-    ? `Translate the following sentence into modern Gen Z slang. Use current slang, emojis, and casual tone, but keep the meaning clear and avoid excessive filler or random jokes.
+    ? `Translate the following into a modern Gen Z slang sentence. Use common slang and emojis. Keep the meaning clear and output only the Gen Z version — no extra notes or explanation.
 
 Text: "${text}"`
-    : `Translate the following Gen Z slang into clear, professional English. The result should sound natural and suitable for polite conversation, not too academic or robotic.
+    :  `Translate the following Gen Z slang into a single clear, professional English sentence. Do not explain, list options, or add commentary — just provide the translation only.
 
 Text: "${text}"`;
   try {
