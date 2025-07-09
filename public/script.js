@@ -1,4 +1,4 @@
-
+// === script.js ===
 async function doTranslate(direction) {
   const inputText = document.getElementById("inputText").value;
   if (!inputText.trim()) return;
@@ -12,7 +12,7 @@ async function doTranslate(direction) {
   const data = await response.json();
   document.getElementById("outputText").value = data.result;
 }
- 
+
 function copyOutput() {
   const output = document.getElementById("outputText");
   output.select();

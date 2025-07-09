@@ -1,4 +1,11 @@
 {
   "version": 2,
-  "builds": [{ "src": "api/translate.js", "use": "@vercel/node" }]
+  "builds": [
+    { "src": "api/translate.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/.*", "dest": "/api/translate.js" },
+    { "src": "/", "dest": "/public/index.html" }
+  ]
 }
+
