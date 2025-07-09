@@ -22,6 +22,9 @@ export default async function handler(req, res) {
       ]
     });
 
+
+
+    
     const reply = completion.choices[0].message.content;
     res.status(200).json({ result: reply });
   } catch (error) {
