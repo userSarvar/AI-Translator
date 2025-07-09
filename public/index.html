@@ -2,90 +2,69 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gen Z Translator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="navbar">
-    <div class="logo">T<span>A</span></div>
-    <nav>
-      <ul>
-        <li><a href="#">All Translators</a></li>
-        <li><a href="#">Translator Creator</a></li>
-      </ul>
-    </nav>
+  <header>
+    <h1>Gen Z Translator</h1>
+    <button id="darkToggle">🌙</button>
   </header>
 
-  <main class="translator-container">
-    <div class="breadcrumbs">Home → Translators</div>
-    <h1 class="title">Gen Z Translator</h1>
-    <p class="subtitle">Translate from Normal Language into Gen Z</p>
-
+  <main>
     <div class="translator-box">
-  <div class="column">
-    <div class="label" id="label-left">Normal Language</div>
-    <textarea id="inputText" placeholder="Enter text to translate..."></textarea>
-    <button class="translate-btn" onclick="doTranslate()">Translate →</button>
-  </div>
+      <div class="labels">
+        <span id="label-left">Normal Language</span>
+        <button id="switchBtn" title="Swap Languages">⇄</button>
+        <span id="label-right">Gen Z</span>
+      </div>
 
-  <div class="column middle">
-    <button class="toggle-btn" onclick="toggleDirection()" title="Swap Languages">⇄</button>
-  </div>
+      <div class="textareas">
+        <textarea id="inputText" placeholder="Enter text to translate..."></textarea>
+        <textarea id="outputText" placeholder="Translation appears here..." readonly></textarea>
+      </div>
 
-  <div class="column">
-    <div class="label" id="label-right">Gen Z</div>
-    <textarea id="outputText" readonly></textarea>
-    <button class="tts-btn">🔊 Text to Speech</button>
-  </div>
-</div>
-
-
-    <p class="disclaimer">
-      Disclaimer: This AI-powered tool is provided solely for entertainment and creative purposes and is not guaranteed to be accurate.
-    </p>
+      <button id="translateBtn">Translate ➜</button>
+    </div>
   </main>
 
-<script>
-  let direction = 'to_genz';
+  <footer>
+    <p>This AI-powered tool is for fun. Not always accurate — use responsibly ✌️</p>
+  </footer>
 
-  async function doTranslate() {
-    const inputText = document.getElementById("inputText").value;
-    const output = document.getElementById("outputText");
-    output.value = "Translating...";
+  <script>
+    let direction = "to_genz";
 
-    const response = await fetch("/api/translate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: inputText, direction }),
-    });
+    document.getElementById("switchBtn").onclick = () => {
+      direction = direction === "to_genz" ? "to_normal" : "to_genz";
+      const left = document.getElementById("label-left");
+      const right = document.getElementById("label-right");
+      [left.textContent, right.textContent] = [right.textContent, left.textContent];
 
-    const data = await response.json();
-    output.value = data.result;
-  }
+      const input = document.getElementById("inputText");
+      const output = document.getElementById("outputText");
+      [input.value, output.value] = [output.value, input.value];
+    };
 
-  function toggleDirection() {
-    const leftLabel = document.getElementById("label-left");
-    const rightLabel = document.getElementById("label-right");
+    document.getElementById("darkToggle").onclick = () => {
+      document.body.classList.toggle("dark");
+    };
 
-    if (direction === "to_genz") {
-      direction = "to_normal";
-      leftLabel.textContent = "Gen Z";
-      rightLabel.textContent = "Normal Language";
-    } else {
-      direction = "to_genz";
-      leftLabel.textContent = "Normal Language";
-      rightLabel.textContent = "Gen Z";
-    }
+    document.getElementById("translateBtn").onclick = async () => {
+      const text = document.getElementById("inputText").value;
+      const out = document.getElementById("outputText");
+      out.value = "Translating...";
 
-    // Swap textarea contents visually
-    const input = document.getElementById("inputText");
-    const output = document.getElementById("outputText");
-    const temp = input.value;
-    input.value = output.value;
-    output.value = temp;
-  }
-</script>
+      const res = await fetch("/api/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, direction }),
+      });
 
+      const data = await res.json();
+      out.value = data.result;
+    };
+  </script>
 </body>
 </html>
