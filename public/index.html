@@ -23,39 +23,69 @@
     <p class="subtitle">Translate from Normal Language into Gen Z</p>
 
     <div class="translator-box">
-      <div class="column">
-        <div class="label">Normal Language</div>
-        <textarea id="inputText" placeholder="Enter text to translate..."></textarea>
-        <button class="translate-btn" onclick="doTranslate('to_genz')">Translate →</button>
-      </div>
+  <div class="column">
+    <div class="label" id="label-left">Normal Language</div>
+    <textarea id="inputText" placeholder="Enter text to translate..."></textarea>
+    <button class="translate-btn" onclick="doTranslate()">Translate →</button>
+  </div>
 
-      <div class="column">
-        <div class="label">Gen Z</div>
-        <textarea id="outputText" readonly></textarea>
-        <button class="tts-btn">🔊 Text to Speech</button>
-      </div>
-    </div>
+  <div class="column middle">
+    <button class="toggle-btn" onclick="toggleDirection()" title="Swap Languages">⇄</button>
+  </div>
+
+  <div class="column">
+    <div class="label" id="label-right">Gen Z</div>
+    <textarea id="outputText" readonly></textarea>
+    <button class="tts-btn">🔊 Text to Speech</button>
+  </div>
+</div>
+
 
     <p class="disclaimer">
       Disclaimer: This AI-powered tool is provided solely for entertainment and creative purposes and is not guaranteed to be accurate.
     </p>
   </main>
 
-  <script>
-    async function doTranslate(direction) {
-      const inputText = document.getElementById("inputText").value;
-      const output = document.getElementById("outputText");
-      output.value = "Translating...";
+<script>
+  let direction = 'to_genz';
 
-      const response = await fetch("/api/translate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: inputText, direction }),
-      });
+  async function doTranslate() {
+    const inputText = document.getElementById("inputText").value;
+    const output = document.getElementById("outputText");
+    output.value = "Translating...";
 
-      const data = await response.json();
-      output.value = data.result;
+    const response = await fetch("/api/translate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: inputText, direction }),
+    });
+
+    const data = await response.json();
+    output.value = data.result;
+  }
+
+  function toggleDirection() {
+    const leftLabel = document.getElementById("label-left");
+    const rightLabel = document.getElementById("label-right");
+
+    if (direction === "to_genz") {
+      direction = "to_normal";
+      leftLabel.textContent = "Gen Z";
+      rightLabel.textContent = "Normal Language";
+    } else {
+      direction = "to_genz";
+      leftLabel.textContent = "Normal Language";
+      rightLabel.textContent = "Gen Z";
     }
-  </script>
+
+    // Swap textarea contents visually
+    const input = document.getElementById("inputText");
+    const output = document.getElementById("outputText");
+    const temp = input.value;
+    input.value = output.value;
+    output.value = temp;
+  }
+</script>
+
 </body>
 </html>

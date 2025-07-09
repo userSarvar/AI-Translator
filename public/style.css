@@ -145,3 +145,26 @@ textarea {
   margin-top: 20px;
   text-align: center;
 }
+
+
+
+.middle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 50px;
+}
+
+.toggle-btn {
+  font-size: 26px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  transition: transform 0.2s ease;
+}
+
+.toggle-btn:hover {
+  transform: rotate(180deg);
+  color: #000;
+}
