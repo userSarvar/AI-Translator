@@ -5,6 +5,8 @@
   --border: #ccc;
   --btn-bg: #003366;
   --btn-text: #fff;
+  --card: #fff;
+  --accent: #003366;
 }
 body.dark {
   --bg: #1e1e1e;
@@ -13,6 +15,8 @@ body.dark {
   --border: #555;
   --btn-bg: #444;
   --btn-text: #fff;
+  --card: #1e1e1e;
+  --accent: #00c3ff;
 }
 
 body {
@@ -132,4 +136,37 @@ footer {
   height: 1.2em; /* about half of the title text size */
   
 
+}
+
+
+
+/* Toggle Button Style */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 42px;
+  height: 42px;
+  background: var(--card);
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  transition: background 0.3s ease;
+}
+
+.toggle-icon {
+  width: 20px;
+  height: 20px;
+  background-image: url("sun.svg"); /* Light mode icon */
+  background-size: cover;
+  transition: background-image 0.3s ease;
+}
+
+[data-theme="dark"] .toggle-icon {
+  background-image: url("moon.svg"); /* Dark mode icon */
 }

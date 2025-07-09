@@ -11,10 +11,13 @@
   <header>
     
     <h1 class="title-with-logo">
-  <img src="favicon.png" alt="Gen Z Logo" class="title-logo">
+  <img src="favicon2.png" alt="Gen Z Logo" class="title-logo">
   Gen Z Translator
 </h1>
-    <button id="darkToggle">🌙</button>
+    <div class="theme-toggle" id="theme-toggle" title="Toggle dark mode">
+  <div class="toggle-icon"></div>
+</div>
+
   </header>
 
   <main>
@@ -70,6 +73,27 @@
       const data = await res.json();
       out.value = data.result;
     };
+
+
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("theme-toggle");
+
+  // Apply saved theme or system preference
+  const storedTheme = localStorage.getItem("theme");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const theme = storedTheme || (prefersDark ? "dark" : "light");
+  document.documentElement.setAttribute("data-theme", theme);
+
+  toggle.addEventListener("click", () => {
+    const current = document.documentElement.getAttribute("data-theme");
+    const next = current === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem("theme", next);
+  });
+});
+
   </script>
 </body>
 </html>
