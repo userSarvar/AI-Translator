@@ -117,3 +117,19 @@ footer {
   font-size: 0.85rem;
   color: var(--text);
 }
+
+.title-with-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+.title-logo {
+  height: 1.2em; /* about half of the title text size */
+  border-radius: 10px 0 0 10px; /* rounded on the left side only */
+
+}
