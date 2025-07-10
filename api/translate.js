@@ -2,14 +2,14 @@ import fetch from 'node-fetch';
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-// List of fallback models (all free)
+// List of fallback models (free tier)
 const models = [
-  'deepseek/deepseek-r1-0528-qwen3-8b:free',        // Your current one
-  'mistralai/mistral-small-3.2-24b-instruct:free',  // Best quality free
-  'qwen/qwen1.5-7b-chat:free',                      // Fast & simple
-  'qwen/qwen3-32b-04-28:free',                      // More creative
-  'venice/uncensored:free',                         // uncensored
-  'google/gemma-3-27b-it:free'                          
+  'deepseek/deepseek-r1-0528-qwen3-8b:free',
+  'mistralai/mistral-small-3.2-24b-instruct:free',
+  'qwen/qwen1.5-7b-chat:free',
+  'qwen/qwen3-32b-04-28:free',
+  'venice/uncensored:free',
+  'google/gemma-3-27b-it:free'
 ];
 
 export default async function handler(req, res) {
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-const { text, direction, model: selectedModel } = req.body;
+  const { text, direction, model: selectedModel } = req.body;
   if (!text || !direction) {
     return res.status(400).json({ result: 'Invalid input.' });
   }
@@ -26,71 +26,42 @@ const { text, direction, model: selectedModel } = req.body;
     ? `Your job is to rephrase the following sentence into current Gen Z slang. Use trendy but widely understood slang, memes, abbreviations, and emojis. The result should sound natural to a Gen Z speaker, be funny if possible, and maintain the original meaning clearly. Do NOT explain or add commentary — output only the Gen Z version in one sentence.\n\nInput: "${text}"`
     : `You are a formal English translator. Convert the following Gen Z slang into a clear, professional sentence. Do not add commentary or multiple options — return only one accurate, grammatically correct translation that preserves the original meaning in plain English.\n\nInput: "${text}"`;
 
-  // If user selected a specific model
-if (selectedModel && selectedModel !== "auto") {
-  try {
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: selectedModel,
-        messages: [
-          { role: 'system', content: 'You are a precise translator who always returns one accurate sentence without adding comments or choices.' },
-          { role: 'user', content: prompt }
-        ]
-      })
-    });
-
-    const data = await response.json();
-    if (data.choices?.[0]?.message?.content) {
-      return res.status(200).json({
-        result: data.choices[0].message.content,
-        model: selectedModel
+  // 👉 If a specific model was selected
+  if (selectedModel && selectedModel !== "auto") {
+    try {
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: selectedModel,
+          messages: [
+            { role: 'system', content: 'You are a precise translator who always returns one accurate sentence without adding comments or choices.' },
+            { role: 'user', content: prompt }
+          ]
+        })
       });
-    } else {
-      console.warn(`User-selected model failed:`, data);
-      return res.status(500).json({ result: "Model failed. Try again later.", model: selectedModel });
+
+      const data = await response.json();
+      if (data.choices?.[0]?.message?.content) {
+        return res.status(200).json({
+          result: data.choices[0].message.content,
+          model: selectedModel
+        });
+      } else {
+        console.warn(`Selected model failed:`, data);
+        return res.status(500).json({ result: "Model failed. Try again later.", model: selectedModel });
+      }
+    } catch (err) {
+      console.error("User-selected model error:", err);
+      return res.status(500).json({ result: "Server error with selected model.", model: selectedModel });
     }
-
-  } catch (err) {
-    console.error("User model error:", err);
-    return res.status(500).json({ result: "Server error.", model: selectedModel });
   }
-}
 
-// Otherwise auto-rotate
-for (const model of models) {
-  try {
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model,
-        messages: [
-          { role: 'system', content: 'You are a precise translator who always returns one accurate sentence without adding comments or choices.' },
-          { role: 'user', content: prompt }
-        ]
-      })
-    });
-
-    const data = await response.json();
-    if (data.choices?.[0]?.message?.content) {
-      return res.status(200).json({
-        result: data.choices[0].message.content,
-        model
-      });
-    }
-  } catch (err) {
-    console.error(`Fallback model error:`, err);
-  }
-}
- {
+  // 👉 Auto-rotate through models
+  for (const model of models) {
     try {
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
@@ -110,10 +81,11 @@ for (const model of models) {
       const data = await response.json();
 
       if (data.choices?.[0]?.message?.content) {
-        return res.status(200).json({result: data.choices[0].message.content,
-    model
-  });
-} else {
+        return res.status(200).json({
+          result: data.choices[0].message.content,
+          model
+        });
+      } else {
         console.warn(`Model ${model} failed:`, data);
       }
     } catch (err) {
@@ -121,6 +93,6 @@ for (const model of models) {
     }
   }
 
-  // If none succeeded
+  // ❌ All models failed
   return res.status(500).json({ result: "All models failed. Try again later." });
 }
