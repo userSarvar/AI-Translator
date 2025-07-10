@@ -9,7 +9,8 @@ const models = [
   'qwen/qwen1.5-7b-chat:free',
   'qwen/qwen3-32b-04-28:free',
   'venice/uncensored:free',
-  'google/gemma-3-27b-it:free'
+  'google/gemma-3-27b-it:free',
+  'meta-llama/llama-4-maverick:free'
 ];
 
 export default async function handler(req, res) {
