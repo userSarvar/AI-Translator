@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { text, direction } = req.body;
+const { text, direction, model: selectedModel } = req.body;
   if (!text || !direction) {
     return res.status(400).json({ result: 'Invalid input.' });
   }
@@ -24,7 +24,71 @@ export default async function handler(req, res) {
     ? `Your job is to rephrase the following sentence into current Gen Z slang. Use trendy but widely understood slang, memes, abbreviations, and emojis. The result should sound natural to a Gen Z speaker, be funny if possible, and maintain the original meaning clearly. Do NOT explain or add commentary — output only the Gen Z version in one sentence.\n\nInput: "${text}"`
     : `You are a formal English translator. Convert the following Gen Z slang into a clear, professional sentence. Do not add commentary or multiple options — return only one accurate, grammatically correct translation that preserves the original meaning in plain English.\n\nInput: "${text}"`;
 
-  for (const model of models) {
+  // If user selected a specific model
+if (selectedModel && selectedModel !== "auto") {
+  try {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: selectedModel,
+        messages: [
+          { role: 'system', content: 'You are a precise translator who always returns one accurate sentence without adding comments or choices.' },
+          { role: 'user', content: prompt }
+        ]
+      })
+    });
+
+    const data = await response.json();
+    if (data.choices?.[0]?.message?.content) {
+      return res.status(200).json({
+        result: data.choices[0].message.content,
+        model: selectedModel
+      });
+    } else {
+      console.warn(`User-selected model failed:`, data);
+      return res.status(500).json({ result: "Model failed. Try again later.", model: selectedModel });
+    }
+
+  } catch (err) {
+    console.error("User model error:", err);
+    return res.status(500).json({ result: "Server error.", model: selectedModel });
+  }
+}
+
+// Otherwise auto-rotate
+for (const model of models) {
+  try {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: 'system', content: 'You are a precise translator who always returns one accurate sentence without adding comments or choices.' },
+          { role: 'user', content: prompt }
+        ]
+      })
+    });
+
+    const data = await response.json();
+    if (data.choices?.[0]?.message?.content) {
+      return res.status(200).json({
+        result: data.choices[0].message.content,
+        model
+      });
+    }
+  } catch (err) {
+    console.error(`Fallback model error:`, err);
+  }
+}
+ {
     try {
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',

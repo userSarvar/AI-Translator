@@ -180,3 +180,18 @@ footer {
   margin-bottom: 8px;
   font-style: italic;
 }
+.model-select {
+  margin: 1rem 0 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+.model-select select {
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--box);
+  color: var(--text);
+}

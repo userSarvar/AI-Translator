@@ -33,6 +33,16 @@
         <textarea id="inputText" placeholder="Enter text to translate..."></textarea>
         <textarea id="outputText" placeholder="Translation appears here..." readonly></textarea>
       </div>
+      <div class="model-select">
+        <label for="modelSelect">Choose Model:</label>
+        <select id="modelSelect">
+          <option value="deepseek/deepseek-r1-0528-qwen3-8b:free">DeepSeek (Qwen-3)</option>
+          <option value="mistralai/mistral-small-3.2-24b-instruct:free">Mistral</option>
+          <option value="qwen/qwen1.5-7b-chat:free">Qwen 1.5</option>
+          <option value="qwen/qwen3-32b-04-28:free">Qwen 3</option>
+          <option value="auto">Auto (Try All)</option>
+  </select>
+</div>
 
       <button id="translateBtn">Translate ➜</button>
     </div>
@@ -59,18 +69,20 @@
     document.getElementById("translateBtn").onclick = async () => {
       const text = document.getElementById("inputText").value;
       const out = document.getElementById("outputText");
+      const model = document.getElementById("modelSelect").value;
       out.value = "Translating...";
 
       const res = await fetch("/api/translate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, direction }),
+        body: JSON.stringify({ text, direction, model })
       });
 
       const data = await res.json();
       out.value = data.result;
       document.getElementById("model-info").textContent = `Model: ${data.model}`;
     };
+
 
 
 
