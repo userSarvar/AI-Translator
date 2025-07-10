@@ -8,7 +8,8 @@ const models = [
   'mistralai/mistral-small-3.2-24b-instruct:free',  // Best quality free
   'qwen/qwen1.5-7b-chat:free',                      // Fast & simple
   'qwen/qwen3-32b-04-28:free',                      // More creative
-  'venice/uncensored:free'                          // uncensored
+  'venice/uncensored:free',                         // uncensored
+  'google/gemma-3-27b-it:free'                          
 ];
 
 export default async function handler(req, res) {
