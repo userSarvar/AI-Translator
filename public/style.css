@@ -195,3 +195,31 @@ footer {
   background: var(--box);
   color: var(--text);
 }
+
+
+
+#copyBtn {
+  background: transparent;
+  border: none;
+  font-size: 0.9rem;
+  margin-left: 6px;
+  cursor: pointer;
+  color: var(--text);
+}
+
+#copyBtn:hover {
+  color: var(--accent);
+}
+
+
+#shareImageBtn {
+  margin-top: 0.5rem;
+  width: 100%;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

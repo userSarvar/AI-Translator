@@ -27,7 +27,11 @@
   <link rel="apple-touch-icon" href="/favicon2.png" />
   <meta name="theme-color" content="#003366">
   <!-- google meta tag for verification-->
-   <meta name="google-site-verification" content="DLGrXGxQ19ro-Sxbgi2jwm04xrtVEWqo3_mKRBPu8Xk" />
+  <meta name="google-site-verification" content="DLGrXGxQ19ro-Sxbgi2jwm04xrtVEWqo3_mKRBPu8Xk" />
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+
 </head>
 <body>
   <header>
@@ -48,7 +52,9 @@
       <div class="labels">
         <span id="label-left">Normal Language</span>
         <button id="switchBtn" title="Swap Languages">⇄</button>
-        <span id="label-right">Gen Z</span>
+        <span id="label-right">Gen Z
+          <button id="copyBtn" title="Copy Translation">📋</button>
+        </span>
       </div>
 
       <div class="textareas">
@@ -69,6 +75,8 @@
 </div>
 
       <button id="translateBtn">Translate ➜</button>
+      <button id="shareImageBtn">📸 Save & Share</button>
+
     </div>
   </main>
 
@@ -88,6 +96,15 @@
       const input = document.getElementById("inputText");
       const output = document.getElementById("outputText");
       [input.value, output.value] = [output.value, input.value];
+    };
+    document.getElementById("copyBtn").onclick = () => {
+      const output = document.getElementById("outputText").value;
+      if (output.trim()) {
+        navigator.clipboard.writeText(output);
+        alert("Translation copied!");
+      } else {
+        alert("Nothing to copy.");
+      }
     };
 
     document.getElementById("translateBtn").onclick = async () => {
@@ -127,6 +144,20 @@
     localStorage.setItem("theme", next);
   });
 });
+
+
+
+document.getElementById("shareImageBtn").onclick = () => {
+  const node = document.querySelector(".translator-box");
+  html2canvas(node).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "translation.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+};
+
+
 
   </script>
 </body>
