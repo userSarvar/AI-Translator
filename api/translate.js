@@ -7,7 +7,8 @@ const models = [
   'deepseek/deepseek-r1-0528-qwen3-8b:free',        // Your current one
   'mistralai/mistral-small-3.2-24b-instruct:free',  // Best quality free
   'qwen/qwen1.5-7b-chat:free',                      // Fast & simple
-  'qwen/qwen3-32b-04-28:free'                       // More creative
+  'qwen/qwen3-32b-04-28:free',                      // More creative
+  'venice/uncensored:free'                          // uncensored
 ];
 
 export default async function handler(req, res) {
