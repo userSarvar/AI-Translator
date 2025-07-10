@@ -22,6 +22,7 @@
 
   <main>
     <div class="translator-box">
+      <div class="model-info" id="model-info">Model: ...</div>
       <div class="labels">
         <span id="label-left">Normal Language</span>
         <button id="switchBtn" title="Swap Languages">⇄</button>
@@ -68,6 +69,7 @@
 
       const data = await res.json();
       out.value = data.result;
+      document.getElementById("model-info").textContent = `Model: ${data.model}`;
     };
 
 
