@@ -3,10 +3,9 @@ import fetch from 'node-fetch';
 const TOGETHER_API_KEY = process.env.TOGETHER_API_KEY;
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-// Model lists
 const togetherModels = [
   'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free',
-  'serverless-qwen-qwen3-32b-fp8',
+  'serverless-qwen-qwen3-32b-fp8'
 ];
 
 const openrouterModels = [
@@ -24,7 +23,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { text, direction } = req.body;
+  const { text, direction, model: selectedModel } = req.body;
   if (!text || !direction) {
     return res.status(400).json({ result: 'Invalid input.' });
   }
@@ -34,7 +33,51 @@ export default async function handler(req, res) {
       ? `Your job is to rephrase the following sentence into current Gen Z slang. Use trendy but widely understood slang, memes, abbreviations, and emojis. The result should sound natural to a Gen Z speaker, be funny if possible, and maintain the original meaning clearly. Do NOT explain or add commentary — output only the Gen Z version in one sentence.\n\nInput: "${text}"`
       : `You are a formal English translator. Convert the following Gen Z slang into a clear, professional sentence. Do not add commentary or multiple options — return only one accurate, grammatically correct translation that preserves the original meaning in plain English.\n\nInput: "${text}"`;
 
-  // 1. Try Together.ai models
+  // ✅ If the user selected a model
+  if (selectedModel && selectedModel !== 'auto') {
+    const isTogether = togetherModels.includes(selectedModel);
+    const endpoint = isTogether
+      ? 'https://api.together.xyz/v1/chat/completions'
+      : 'https://openrouter.ai/api/v1/chat/completions';
+
+    const headers = {
+      'Authorization': `Bearer ${isTogether ? TOGETHER_API_KEY : OPENROUTER_API_KEY}`,
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          model: selectedModel,
+          messages: [
+            {
+              role: 'system',
+              content:
+                'You are a precise translator who always returns one accurate sentence without adding comments or choices.',
+            },
+            { role: 'user', content: prompt },
+          ],
+        }),
+      });
+
+      const data = await response.json();
+      if (data.choices?.[0]?.message?.content) {
+        return res.status(200).json({
+          result: data.choices[0].message.content,
+          model: selectedModel,
+          provider: isTogether ? 'Together.ai' : 'OpenRouter',
+        });
+      } else {
+        console.warn(`Model failed (${selectedModel}):`, data);
+      }
+    } catch (err) {
+      console.error(`Selected model ${selectedModel} error:`, err);
+    }
+  }
+
+  // 🔁 Auto-fallback to Together models
   for (const model of togetherModels) {
     try {
       const response = await fetch('https://api.together.xyz/v1/chat/completions', {
@@ -60,16 +103,16 @@ export default async function handler(req, res) {
       if (data.choices?.[0]?.message?.content) {
         return res.status(200).json({
           result: data.choices[0].message.content,
-          model: model,
+          model,
           provider: 'Together.ai',
         });
       }
     } catch (err) {
-      console.error(`Together model ${model} failed:`, err);
+      console.error(`Together fallback ${model} error:`, err);
     }
   }
 
-  // 2. Fallback to OpenRouter if Together fails
+  // 🔁 Auto-fallback to OpenRouter models
   for (const model of openrouterModels) {
     try {
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -95,12 +138,12 @@ export default async function handler(req, res) {
       if (data.choices?.[0]?.message?.content) {
         return res.status(200).json({
           result: data.choices[0].message.content,
-          model: model,
+          model,
           provider: 'OpenRouter',
         });
       }
     } catch (err) {
-      console.error(`OpenRouter model ${model} failed:`, err);
+      console.error(`OpenRouter fallback ${model} error:`, err);
     }
   }
 
