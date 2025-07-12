@@ -5,7 +5,8 @@ const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 const togetherModels = [
   'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free',
-  'serverless-qwen-qwen3-32b-fp8'
+  'serverless-qwen-qwen3-32b-fp8',
+  'lgai/exaone-deep-32b'
 ];
 
 const openrouterModels = [
