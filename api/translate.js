@@ -5,7 +5,7 @@ const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 const togetherModels = [
   'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free',
-  'serverless-qwen-qwen3-32b-fp8',
+  'deepseek-ai/DeepSeek-R1-Distill-Llama-70B-free',
   'lgai/exaone-deep-32b'
 ];
 
