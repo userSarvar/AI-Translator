@@ -62,14 +62,10 @@ main {
   height: 40px;
 }
 
-
 .labels span {
   width: 40%;
   text-align: center;
   font-weight: bold;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 #switchBtn {
@@ -216,14 +212,14 @@ footer {
 }
 
 
-#shareBtn {
-  margin-top: 1rem;
-  background: var(--accent);
-  color: white;
-  padding: 0.7rem;
+#shareImageBtn {
+  margin-top: 0.5rem;
+  width: 100%;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  padding: 0.6rem;
   font-size: 1rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  width: 100%;
 }
