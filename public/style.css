@@ -203,7 +203,7 @@ footer {
 
 
 #copyBtn {
-  position: absolute;
+  position: static;
   bottom: 8px;
   right: 8px;
   background: var(--btn-bg);
