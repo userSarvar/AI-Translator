@@ -7,8 +7,7 @@ const HUGGINGFACE_API_KEY = process.env.HUGGINGFACE_API_KEY;
 const togetherModels = [
   'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free',
   'deepseek-ai/DeepSeek-R1-Distill-Llama-70B-free',
-  'nim/nvidia/llama-3.3-nemotron-super-49b-v1',
-  'google/gemma-2b-it'
+  
 ];
 
 const openrouterModels = [
@@ -22,8 +21,8 @@ const openrouterModels = [
 ];
 
 const huggingfaceModels = [
-  'tiiuae/falcon-7b-instruct',
-  'google/flan-t5-xl'
+
+  'meta-llama/Llama-3.1-8B-Instruct'
 ];
 
 function fetchWithTimeout(url, options, timeout = 15000) {
