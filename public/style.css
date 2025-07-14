@@ -203,23 +203,16 @@ footer {
 
 
 #copyBtn {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  background: var(--btn-bg);
-  color: var(--btn-text);
+  background: transparent;
   border: none;
-  padding: 4px 6px;
   font-size: 0.9rem;
-  border-radius: 4px;
+  margin-left: 6px;
   cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 0.2s;
+  color: var(--text);
 }
 
 #copyBtn:hover {
   color: var(--accent);
-  opacity: 1;
 }
 
 
@@ -233,39 +226,4 @@ footer {
   border-radius: 6px;
   cursor: pointer;
   width: 100%;
-}
-/* Adjust translator box on small screens */
-@media (max-width: 600px) {
-  .translator-box {
-    padding: 1rem;
-  }
-
-  .textareas {
-    flex-direction: column;
-  }
-
-  textarea {
-    height: 120px;
-  }
-
-  #translateBtn,
-  #shareBtn {
-    font-size: 1rem;
-    padding: 0.6rem;
-  }
-
-  .labels {
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-bottom: 0.75rem;
-  }
-
-  .labels span {
-    width: 45%;
-    font-size: 0.9rem;
-  }
-
-  #switchBtn {
-    font-size: 1.2rem;
-  }
 }
