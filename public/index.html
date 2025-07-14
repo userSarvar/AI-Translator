@@ -30,6 +30,7 @@
   <meta name="google-site-verification" content="DLGrXGxQ19ro-Sxbgi2jwm04xrtVEWqo3_mKRBPu8Xk" />
 
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  
 
 
 </head>
@@ -84,7 +85,8 @@
 </div>
 
       <button id="translateBtn">Translate ➜</button>
-      <button id="shareImageBtn">📸 Save & Share</button>
+      <button id="shareBtn">📤 Share</button>
+
 
     </div>
   </main>
@@ -156,14 +158,38 @@
 
 
 
-document.getElementById("shareImageBtn").onclick = () => {
-  const node = document.querySelector(".translator-box");
-  html2canvas(node).then(canvas => {
-    const link = document.createElement("a");
-    link.download = "translation.png";
-    link.href = canvas.toDataURL();
-    link.click();
-  });
+document.getElementById("shareBtn").onclick = async () => {
+  const box = document.querySelector(".translator-box");
+
+  try {
+    const canvas = await html2canvas(box, {
+      scale: 2,  // High res
+      useCORS: true
+    });
+
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+    const file = new File([blob], "genz_translation.png", { type: "image/png" });
+
+    // 📱 If Web Share API is supported
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        title: "Gen Z Translator",
+        text: "Check out my translation!",
+        files: [file],
+      });
+    } else {
+      // 🌐 Fallback: download image
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "genz_translation.png";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  } catch (err) {
+    alert("Sharing failed. Try again.");
+    console.error(err);
+  }
 };
 
 
