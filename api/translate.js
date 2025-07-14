@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 
 const TOGETHER_API_KEY = process.env.TOGETHER_API_KEY;
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+const HUGGINGFACE_API_KEY = process.env.HUGGINGFACE_API_KEY;
 
 const togetherModels = [
   'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free',
@@ -19,7 +20,12 @@ const openrouterModels = [
   'google/gemma-3-27b-it:free',
   'meta-llama/llama-4-maverick:free'
 ];
-// Timeout helper for fetch (in milliseconds)
+
+const huggingfaceModels = [
+  'tiiuae/falcon-7b-instruct',
+  'google/flan-t5-xl'
+];
+
 function fetchWithTimeout(url, options, timeout = 15000) {
   return Promise.race([
     fetch(url, options),
@@ -29,133 +35,106 @@ function fetchWithTimeout(url, options, timeout = 15000) {
   ]);
 }
 
+function formatHFInput(prompt) {
+  return {
+    inputs: prompt,
+    options: { wait_for_model: true }
+  };
+}
+
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { text, direction, model: selectedModel } = req.body;
-  if (!text || !direction) {
-    return res.status(400).json({ result: 'Invalid input.' });
-  }
+  if (!text || !direction) return res.status(400).json({ result: 'Invalid input.' });
 
-  const prompt =
-    direction === 'to_genz'
-      ? `Your job is to rephrase the following sentence into current Gen Z slang. Use trendy but widely understood slang, memes, abbreviations, and emojis. The result should sound natural to a Gen Z speaker, be funny if possible, and maintain the original meaning clearly. Do NOT explain or add commentary — output only the Gen Z version in one sentence.Even don't add any thoughts too\n\nInput: "${text}"`
-      : `You are a formal English translator. Convert the following Gen Z slang into a clear, professional sentence. Do not add commentary or multiple options — return only one accurate, grammatically correct translation that preserves the original meaning in plain English.Even don't add any thoughts too\n\nInput: "${text}"`;
+  const prompt = direction === 'to_genz'
+    ? `Your job is to rephrase the following sentence into current Gen Z slang. Use trendy but widely understood slang, memes, abbreviations, and emojis. Output only one sentence with no explanation.\n\nInput: "${text}"`
+    : `Convert the following Gen Z slang into professional English. Output only one grammatically correct sentence.\n\nInput: "${text}"`;
 
-  // ✅ If the user selected a model
-  if (selectedModel && selectedModel !== 'auto') {
-    const isTogether = togetherModels.includes(selectedModel);
-    const endpoint = isTogether
-      ? 'https://api.together.xyz/v1/chat/completions'
-      : 'https://openrouter.ai/api/v1/chat/completions';
-
-    const headers = {
-      'Authorization': `Bearer ${isTogether ? TOGETHER_API_KEY : OPENROUTER_API_KEY}`,
-      'Content-Type': 'application/json',
-    };
-
+  const tryModel = async (model, provider, url, headers, bodyFormatter) => {
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetchWithTimeout(url, {
         method: 'POST',
         headers,
-        body: JSON.stringify({
-          model: selectedModel,
-          messages: [
-            {
-              role: 'system',
-              content:
-                'You are a precise translator who always returns one accurate sentence without adding comments or choices.',
-            },
-            { role: 'user', content: prompt },
-          ],
-        }),
-      });
+        body: bodyFormatter(model)
+      }, 15000);
 
       const data = await response.json();
-      if (data.choices?.[0]?.message?.content) {
-        return res.status(200).json({
-          result: data.choices[0].message.content,
-          model: selectedModel,
-          provider: isTogether ? 'Together.ai' : 'OpenRouter',
-        });
-      } else {
-        console.warn(`Model failed (${selectedModel}):`, data);
+      const result =
+        provider === 'HuggingFace'
+          ? data[0]?.generated_text
+          : data.choices?.[0]?.message?.content;
+
+      if (result) {
+        return { result, model, provider };
       }
     } catch (err) {
-      console.error(`Selected model ${selectedModel} error:`, err);
+      console.error(`${provider} model (${model}) failed:`, err.message);
+    }
+    return null;
+  };
+
+  // 🎯 If specific model selected
+  if (selectedModel && selectedModel !== 'auto') {
+    if (togetherModels.includes(selectedModel)) {
+      const headers = {
+        'Authorization': `Bearer ${TOGETHER_API_KEY}`,
+        'Content-Type': 'application/json'
+      };
+      return res.json(await tryModel(
+        selectedModel, 'Together.ai',
+        'https://api.together.xyz/v1/chat/completions',
+        headers,
+        (model) => JSON.stringify({ model, messages: [{ role: 'system', content: 'Be precise' }, { role: 'user', content: prompt }] })
+      ) || { result: 'Failed', model: selectedModel });
+    }
+
+    if (openrouterModels.includes(selectedModel)) {
+      const headers = {
+        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+        'Content-Type': 'application/json'
+      };
+      return res.json(await tryModel(
+        selectedModel, 'OpenRouter',
+        'https://openrouter.ai/api/v1/chat/completions',
+        headers,
+        (model) => JSON.stringify({ model, messages: [{ role: 'system', content: 'Be precise' }, { role: 'user', content: prompt }] })
+      ) || { result: 'Failed', model: selectedModel });
+    }
+
+    if (huggingfaceModels.includes(selectedModel)) {
+      const headers = {
+        'Authorization': `Bearer ${HUGGINGFACE_API_KEY}`,
+        'Content-Type': 'application/json'
+      };
+      return res.json(await tryModel(
+        selectedModel, 'HuggingFace',
+        `https://api-inference.huggingface.co/models/${selectedModel}`,
+        headers,
+        () => JSON.stringify(formatHFInput(prompt))
+      ) || { result: 'Failed', model: selectedModel });
     }
   }
 
-  // 🔁 Auto-fallback to Together models
-  for (const model of togetherModels) {
-    try {
-      const response = await fetchWithTimeout('https://api.together.xyz/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${TOGETHER_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model,
-          messages: [
-            {
-              role: 'system',
-              content:
-                'You are a precise translator who always returns one accurate sentence without adding comments or choices.',
-            },
-            { role: 'user', content: prompt },
-          ],
-        }),
-      },15000);
+  // 🔁 Auto fallback sequence
+  const fallback = [
+    ...togetherModels.map((m) => ({ model: m, provider: 'Together.ai', url: 'https://api.together.xyz/v1/chat/completions', headers: { 'Authorization': `Bearer ${TOGETHER_API_KEY}`, 'Content-Type': 'application/json' } })),
+    ...huggingfaceModels.map((m) => ({ model: m, provider: 'HuggingFace', url: `https://api-inference.huggingface.co/models/${m}`, headers: { 'Authorization': `Bearer ${HUGGINGFACE_API_KEY}`, 'Content-Type': 'application/json' } })),
+    ...openrouterModels.map((m) => ({ model: m, provider: 'OpenRouter', url: 'https://openrouter.ai/api/v1/chat/completions', headers: { 'Authorization': `Bearer ${OPENROUTER_API_KEY}`, 'Content-Type': 'application/json' } }))
+  ];
 
-      const data = await response.json();
-      if (data.choices?.[0]?.message?.content) {
-        return res.status(200).json({
-          result: data.choices[0].message.content,
-          model,
-          provider: 'Together.ai',
-        });
-      }
-    } catch (err) {
-      console.error(`Together fallback ${model} error:`, err);
-    }
-  }
-
-  // 🔁 Auto-fallback to OpenRouter models
-  for (const model of openrouterModels) {
-    try {
-      const response = await fetchWithTimeout('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model,
-          messages: [
-            {
-              role: 'system',
-              content:
-                'You are a precise translator who always returns one accurate sentence without adding comments or choices.',
-            },
-            { role: 'user', content: prompt },
-          ],
-        }),
-      },15000);
-
-      const data = await response.json();
-      if (data.choices?.[0]?.message?.content) {
-        return res.status(200).json({
-          result: data.choices[0].message.content,
-          model,
-          provider: 'OpenRouter',
-        });
-      }
-    } catch (err) {
-      console.error(`OpenRouter fallback ${model} error:`, err);
-    }
+  for (const { model, provider, url, headers } of fallback) {
+    const result = await tryModel(
+      model,
+      provider,
+      url,
+      headers,
+      provider === 'HuggingFace'
+        ? () => JSON.stringify(formatHFInput(prompt))
+        : (model) => JSON.stringify({ model, messages: [{ role: 'system', content: 'Be precise' }, { role: 'user', content: prompt }] })
+    );
+    if (result) return res.status(200).json(result);
   }
 
   return res.status(500).json({ result: 'All models failed. Try again later.' });
