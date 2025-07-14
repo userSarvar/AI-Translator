@@ -4,7 +4,7 @@ const TOGETHER_API_KEY = process.env.TOGETHER_API_KEY;
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 const togetherModels = [
-  
+  'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free',
   'deepseek-ai/DeepSeek-R1-Distill-Llama-70B-free',
   'nim/nvidia/llama-3.3-nemotron-super-49b-v1',
   'google/gemma-2b-it'
@@ -19,6 +19,15 @@ const openrouterModels = [
   'google/gemma-3-27b-it:free',
   'meta-llama/llama-4-maverick:free'
 ];
+// Timeout helper for fetch (in milliseconds)
+function fetchWithTimeout(url, options, timeout = 10000) {
+  return Promise.race([
+    fetch(url, options),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Request timed out')), timeout)
+    )
+  ]);
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -99,7 +108,7 @@ export default async function handler(req, res) {
             { role: 'user', content: prompt },
           ],
         }),
-      });
+      },10000);
 
       const data = await response.json();
       if (data.choices?.[0]?.message?.content) {
@@ -134,7 +143,7 @@ export default async function handler(req, res) {
             { role: 'user', content: prompt },
           ],
         }),
-      });
+      },10000);
 
       const data = await response.json();
       if (data.choices?.[0]?.message?.content) {
