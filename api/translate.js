@@ -20,7 +20,7 @@ const openrouterModels = [
   'meta-llama/llama-4-maverick:free'
 ];
 // Timeout helper for fetch (in milliseconds)
-function fetchWithTimeout(url, options, timeout = 10000) {
+function fetchWithTimeout(url, options, timeout = 15000) {
   return Promise.race([
     fetch(url, options),
     new Promise((_, reject) =>
