@@ -62,10 +62,14 @@ main {
   height: 40px;
 }
 
+
 .labels span {
   width: 40%;
   text-align: center;
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #switchBtn {
@@ -199,27 +203,69 @@ footer {
 
 
 #copyBtn {
-  background: transparent;
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: var(--btn-bg);
+  color: var(--btn-text);
   border: none;
+  padding: 4px 6px;
   font-size: 0.9rem;
-  margin-left: 6px;
+  border-radius: 4px;
   cursor: pointer;
-  color: var(--text);
+  opacity: 0.8;
+  transition: opacity 0.2s;
 }
 
 #copyBtn:hover {
   color: var(--accent);
+  opacity: 1;
 }
 
 
-#shareImageBtn {
-  margin-top: 0.5rem;
-  width: 100%;
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  padding: 0.6rem;
+#shareBtn {
+  margin-top: 1rem;
+  background: var(--accent);
+  color: white;
+  padding: 0.7rem;
   font-size: 1rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  width: 100%;
+}
+/* Adjust translator box on small screens */
+@media (max-width: 600px) {
+  .translator-box {
+    padding: 1rem;
+  }
+
+  .textareas {
+    flex-direction: column;
+  }
+
+  textarea {
+    height: 120px;
+  }
+
+  #translateBtn,
+  #shareBtn {
+    font-size: 1rem;
+    padding: 0.6rem;
+  }
+
+  .labels {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .labels span {
+    width: 45%;
+    font-size: 0.9rem;
+  }
+
+  #switchBtn {
+    font-size: 1.2rem;
+  }
 }
