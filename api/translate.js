@@ -91,7 +91,7 @@ export default async function handler(req, res) {
   // 🔁 Auto-fallback to Together models
   for (const model of togetherModels) {
     try {
-      const response = await fetch('https://api.together.xyz/v1/chat/completions', {
+      const response = await fetchWithTimeout('https://api.together.xyz/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${TOGETHER_API_KEY}`,
@@ -108,7 +108,7 @@ export default async function handler(req, res) {
             { role: 'user', content: prompt },
           ],
         }),
-      },10000);
+      },15000);
 
       const data = await response.json();
       if (data.choices?.[0]?.message?.content) {
@@ -126,7 +126,7 @@ export default async function handler(req, res) {
   // 🔁 Auto-fallback to OpenRouter models
   for (const model of openrouterModels) {
     try {
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      const response = await fetchWithTimeout('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
@@ -143,7 +143,7 @@ export default async function handler(req, res) {
             { role: 'user', content: prompt },
           ],
         }),
-      },10000);
+      },15000);
 
       const data = await response.json();
       if (data.choices?.[0]?.message?.content) {
