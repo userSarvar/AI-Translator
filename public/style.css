@@ -209,7 +209,7 @@ footer {
   background: var(--btn-bg);
   color: var(--btn-text);
   border: none;
-  /* padding: 4px 6px; */
+  padding: 4px 6px;
   font-size: 0.9rem;
   border-radius: 4px;
   cursor: pointer;
