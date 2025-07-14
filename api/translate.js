@@ -4,7 +4,7 @@ const TOGETHER_API_KEY = process.env.TOGETHER_API_KEY;
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 const togetherModels = [
-  'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free',
+  
   'deepseek-ai/DeepSeek-R1-Distill-Llama-70B-free',
   'nim/nvidia/llama-3.3-nemotron-super-49b-v1',
   'google/gemma-2b-it'
