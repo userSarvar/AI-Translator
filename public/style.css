@@ -215,6 +215,7 @@ footer {
   cursor: pointer;
   opacity: 0.8;
   transition: opacity 0.2s;
+  justify-content: flex-end;
 }
 
 #copyBtn:hover {
