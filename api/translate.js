@@ -22,7 +22,7 @@ const openrouterModels = [
 const huggingfaceModels = [
   'mistralai/Mistral-Nemo-Instruct-2407',
   'cutycat2000x/MeowGPT-3.5',
-  'cutycat2000/MeowGPT-2'
+  'google/gemma-2-2b-it'
 ];
 
 // Timeout helper
