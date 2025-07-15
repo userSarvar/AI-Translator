@@ -277,7 +277,3 @@ body[data-theme="dark"] {
 .alert {
   z-index: 9999;
 }
-.alert-box-mine{
-  font-size: 0;
-  padding: 0;
-}
