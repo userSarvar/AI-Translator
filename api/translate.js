@@ -20,10 +20,11 @@ const openrouterModels = [
 ];
 
 const huggingfaceModels = [
-  'mistralai/Mistral-Nemo-Instruct-2407',
-  'cutycat2000x/MeowGPT-3.5',
-  'google/gemma-2-2b-it'
+  'mistralai/Mistral-Small-3.1-Instruct',
+  'mistralai/Mistral-7B-Instruct',
+  'mistralai/Codestral-Mamba-7B-Instruct'
 ];
+
 
 // Timeout helper
 function fetchWithTimeout(url, options, timeout = 10000) {
