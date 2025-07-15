@@ -24,6 +24,11 @@ body[data-theme="dark"] {
   color: var(--text) !important;
 }
 
+[data-theme="dark"] body {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
 
 [data-theme="dark"] textarea {
   background-color: #1e1e1e;
@@ -170,7 +175,7 @@ footer {
 
 /* Toggle Button Style */
 .theme-toggle {
-    top: 20px;
+  top: 20px;
   right: 20px;
   width: 42px;
   height: 42px;
