@@ -275,5 +275,5 @@ body[data-theme="dark"] {
   color: var(--text) !important;
 }
 .alert {
-  z-index: 9999;
+  z-index: 0;
 }
