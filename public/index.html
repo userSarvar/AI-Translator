@@ -37,7 +37,7 @@
 
 </head>
 <body>
-  <div id="alertContainer" class="position-fixed top-0 start-50 translate-middle-x mt-3 z-3" style="max-width: 90vw;"></div>
+<div id="alertContainer" class="position-fixed mt-3 z-3" style="max-width: 90vw;"></div>
 
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
@@ -252,15 +252,18 @@ function showAlert(message, type = 'info') {
   `;
 
   const container = document.getElementById('alertContainer');
+  if (!container) return; // safety
+
   container.appendChild(alert);
+  setTimeout(() => alert.classList.add('show'), 50); // slide down
 
   setTimeout(() => {
+    alert.classList.remove('show');
     alert.classList.add('fade-out');
-    setTimeout(() => alert.remove(), 700); // after fade
+    setTimeout(() => alert.remove(), 600); // remove after fade
   }, 4000);
-  setTimeout(() => alert.classList.add('show'), 10); // for animation
-
 }
+
 
 
   </script>

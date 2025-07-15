@@ -24,11 +24,7 @@ body[data-theme="dark"] {
   color: var(--text) !important;
 }
 
-/* Add this to your style.css */
-[data-theme="dark"] body {
-  background-color: #121212;
-  color: #e0e0e0;
-}
+
 [data-theme="dark"] textarea {
   background-color: #1e1e1e;
   color: #e0e0e0;
@@ -174,8 +170,7 @@ footer {
 
 /* Toggle Button Style */
 .theme-toggle {
-  position: fixed;
-  top: 20px;
+    top: 20px;
   right: 20px;
   width: 42px;
   height: 42px;
