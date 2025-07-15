@@ -274,6 +274,20 @@ body[data-theme="dark"] {
   background-color: var(--bg) !important;
   color: var(--text) !important;
 }
+
 .alert {
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  transform: translateY(-20px);
+  opacity: 0;
   z-index: 9999;
+}
+
+.alert.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.alert.hide {
+  transform: translateY(-20px);
+  opacity: 0;
 }
