@@ -300,6 +300,7 @@ footer {
 
 
 .alert {
+  position: relative;
   transition: transform 0.4s ease, opacity 0.4s ease;
   transform: translateY(-20px);
   opacity: 0;
