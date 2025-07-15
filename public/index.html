@@ -253,7 +253,8 @@ function showAlert(message, type = 'info') {
   `;
 
   const container = document.getElementById('alertContainer');
-  container.appendChild(alert);
+  container.insertBefore(alert, container.firstChild);
+
 
   setTimeout(() => {
     alert.classList.add('fade-out');

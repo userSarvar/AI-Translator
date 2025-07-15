@@ -304,7 +304,7 @@ footer {
   transform: translateX(-50%);
   z-index: 9999; /* ← super high priority */
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: center;
   width: 100%;
   max-width: 100%;
