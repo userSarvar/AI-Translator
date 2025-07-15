@@ -20,9 +20,9 @@ const openrouterModels = [
 ];
 
 const huggingfaceModels = [
-  'tiiuae/falcon-7b-instruct',
-  'google/flan-t5-xl',
-  'meta-llama/Llama-3.1-8B-Instruct'
+  'mistralai/Mistral-Nemo-Instruct-2407',
+  'cutycat2000x/MeowGPT-3.5',
+  'cutycat2000/MeowGPT-2'
 ];
 
 // Timeout helper
