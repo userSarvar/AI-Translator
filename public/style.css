@@ -19,6 +19,21 @@
   --accent: #00c3ff;
 }
 
+body[data-theme="dark"] {
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+/* Add this to your style.css */
+[data-theme="dark"] body {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+[data-theme="dark"] textarea {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
 
 body {
   margin: 0;
@@ -29,13 +44,25 @@ body {
   transition: all 0.3s ease;
 }
 
+
 header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--header-bg); /* Use light/dark theme var */
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+    display: flex;
+
   align-items: center;
   padding: 0.75rem 0.5rem;
   background: var(--btn-bg);
   color: var(--btn-text);
+}
+.theme-toggle {
+  margin-left: auto;
 }
 
 main {
@@ -270,10 +297,7 @@ footer {
     font-size: 1.2rem;
   }
 }
-body[data-theme="dark"] {
-  background-color: var(--bg) !important;
-  color: var(--text) !important;
-}
+
 
 .alert {
   transition: transform 0.4s ease, opacity 0.4s ease;
@@ -290,4 +314,29 @@ body[data-theme="dark"] {
 .alert.hide {
   transform: translateY(-20px);
   opacity: 0;
+}
+/* Add these */
+#alertContainer {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.slide-alert {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.5s ease;
+}
+.slide-alert.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-out {
+  opacity: 0 !important;
+  transform: translateY(-20px);
 }

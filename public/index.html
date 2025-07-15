@@ -241,31 +241,27 @@ document.getElementById("shareBtn").onclick = async () => {
 
 
 function showAlert(message, type = 'info') {
-  const icons = {
-    primary: 'info-fill',
-    success: 'check-circle-fill',
-    warning: 'exclamation-triangle-fill',
-    danger: 'exclamation-triangle-fill',
-  };
-
-  const icon = icons[type] || 'info-fill';
-
-  const wrapper = document.createElement('div');
-  wrapper.innerHTML = `
-    <div class="alert alert-${type} alert-dismissible fade show d-flex align-items-center" role="alert" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); min-width: 300px; z-index: 9999;">
-      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="${type}"><use xlink:href="#${icon}"/></svg>
-      <div>${message}</div>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>`;
+  const alert = document.createElement('div');
+  alert.className = `alert alert-${type} d-flex align-items-center slide-alert`;
+  alert.setAttribute('role', 'alert');
+  alert.innerHTML = `
+    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="${type}">
+      <use xlink:href="#${type === 'success' ? 'check-circle-fill' : type === 'danger' ? 'exclamation-triangle-fill' : type === 'warning' ? 'exclamation-triangle-fill' : 'info-fill'}"/>
+    </svg>
+    <div>${message}</div>
+  `;
 
   const container = document.getElementById('alertContainer');
-  container.appendChild(wrapper);
+  container.appendChild(alert);
 
   setTimeout(() => {
-    wrapper.querySelector('.alert').classList.remove('show');
-    setTimeout(() => wrapper.remove(), 500);
+    alert.classList.add('fade-out');
+    setTimeout(() => alert.remove(), 700); // after fade
   }, 4000);
+  setTimeout(() => alert.classList.add('show'), 10); // for animation
+
 }
+
 
   </script>
 </body>
