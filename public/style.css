@@ -304,7 +304,7 @@ footer {
   transition: transform 0.4s ease, opacity 0.4s ease;
   transform: translateY(-20px);
   opacity: 0;
-  z-index: 1500;
+  z-index: 10000;
 }
 
 .alert.show {
@@ -323,7 +323,7 @@ footer {
   right: 0;
   display: flex;
   justify-content: center;
-  z-index: 1050;
+  z-index: 10000;
 }
 
 .slide-alert {
