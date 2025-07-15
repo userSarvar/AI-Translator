@@ -303,7 +303,7 @@ footer {
   transition: transform 0.4s ease, opacity 0.4s ease;
   transform: translateY(-20px);
   opacity: 0;
-  z-index: 9999;
+  z-index: 999;
 }
 
 .alert.show {
