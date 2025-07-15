@@ -301,6 +301,7 @@ footer {
 
 .alert {
   position: relative;
+  justify-content: center;
   transition: transform 0.4s ease, opacity 0.4s ease;
   transform: translateY(-20px);
   opacity: 0;
@@ -316,7 +317,7 @@ footer {
   transform: translateY(-20px);
   opacity: 0;
 }
-#alertContainer {
+/* #alertContainer {
   position: fixed;
   top: 60px;
   left: 0;
@@ -339,4 +340,4 @@ footer {
 .fade-out {
   opacity: 0 !important;
   transform: translateY(-20px);
-}
+} */
