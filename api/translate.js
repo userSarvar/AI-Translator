@@ -137,9 +137,9 @@ export default async function handler(req, res) {
     if (modelConfig) {
       const result = await tryModel(modelConfig);
       if (result) return res.status(200).json(result);
-      return res.status(500).json({ result: 'Selected model failed.', model: selectedModel });
+      showAlert('Model failed. Try again.', 'danger');
     } else {
-      return res.status(400).json({ result: 'Model not recognized.' });
+      showAlert('Model failed. Try again.', 'warning');
     }
   }
 
@@ -149,5 +149,6 @@ export default async function handler(req, res) {
     if (result) return res.status(200).json(result);
   }
 
-  return res.status(500).json({ result: 'All models failed. Try again later.' });
+    showAlert('All models failed. Try again later.', 'danger');
+
 }
