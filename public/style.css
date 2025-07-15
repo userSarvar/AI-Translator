@@ -24,12 +24,11 @@ body[data-theme="dark"] {
   color: var(--text) !important;
 }
 
+/* Add this to your style.css */
 [data-theme="dark"] body {
   background-color: #121212;
   color: #e0e0e0;
 }
-
-
 [data-theme="dark"] textarea {
   background-color: #1e1e1e;
   color: #e0e0e0;
@@ -175,6 +174,7 @@ footer {
 
 /* Toggle Button Style */
 .theme-toggle {
+  position: fixed;
   top: 20px;
   right: 20px;
   width: 42px;
@@ -304,7 +304,7 @@ footer {
   transition: transform 0.4s ease, opacity 0.4s ease;
   transform: translateY(-20px);
   opacity: 0;
-  z-index: 10000;
+  z-index: 1500;
 }
 
 .alert.show {
@@ -316,14 +316,14 @@ footer {
   transform: translateY(-20px);
   opacity: 0;
 }
-#alertContainer {
+/* #alertContainer {
   position: fixed;
   top: 60px;
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
-  z-index: 10000;
+  z-index: 1050;
 }
 
 .slide-alert {
@@ -339,4 +339,4 @@ footer {
 .fade-out {
   opacity: 0 !important;
   transform: translateY(-20px);
-}
+} */

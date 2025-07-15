@@ -252,18 +252,15 @@ function showAlert(message, type = 'info') {
   `;
 
   const container = document.getElementById('alertContainer');
-  if (!container) return; // safety
-
   container.appendChild(alert);
-  setTimeout(() => alert.classList.add('show'), 50); // slide down
 
   setTimeout(() => {
-    alert.classList.remove('show');
     alert.classList.add('fade-out');
-    setTimeout(() => alert.remove(), 600); // remove after fade
+    setTimeout(() => alert.remove(), 700); // after fade
   }, 4000);
-}
+  setTimeout(() => alert.classList.add('show'), 10); // for animation
 
+}
 
 
   </script>
