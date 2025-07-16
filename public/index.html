@@ -215,20 +215,28 @@ document.getElementById("model-info").textContent = `Model: ${data.model}`;
 document.getElementById("shareBtn").onclick = async () => {
   const box = document.querySelector(".translator-box");
 
+  // 👇 Temporarily hide buttons (optional)
+  const copyBtn = document.getElementById("copyBtn");
+  const shareBtn = document.getElementById("shareBtn");
+  copyBtn.style.visibility = "hidden";
+  shareBtn.style.visibility = "hidden";
+
   try {
     const canvas = await html2canvas(box, { scale: 2, useCORS: true });
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
     const file = new File([blob], "genz_translation.png", { type: "image/png" });
 
-    // Share if available
+    // 👇 Show buttons again after capture
+    copyBtn.style.visibility = "visible";
+    shareBtn.style.visibility = "visible";
+
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
         title: "Gen Z Translator",
-        text: "Check out the translation I made: https://genz-translator.xyz ✨",
+        text: "Check out this translation from https://genz-translator.xyz ✨",
         files: [file],
       });
     } else {
-      // Fallback: Download
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -239,6 +247,9 @@ document.getElementById("shareBtn").onclick = async () => {
   } catch (err) {
     showAlert("Sharing failed. Try again.", "warning");
     console.error(err);
+    // restore buttons if error happens
+    copyBtn.style.visibility = "visible";
+    shareBtn.style.visibility = "visible";
   }
 };
 
