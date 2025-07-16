@@ -242,7 +242,7 @@ footer {
   padding: 6px 10px;
   font-size: 14px;
   border: none;
-  background: var(--button-bg, #ccc);
+  background: var(--card);
   cursor: pointer;
   border-radius: 4px;
   opacity: 0.85;
