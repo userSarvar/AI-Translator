@@ -227,14 +227,19 @@ document.getElementById("shareBtn").onclick = async () => {
   box.appendChild(caption);
 
   // 2. TEMP: Expand label widths and disable truncation
-  const labels = document.querySelectorAll(".labels span");
-  labels.forEach(label => {
-    label.dataset.originalStyle = label.getAttribute("style") || "";
-    label.style.whiteSpace = "normal";
-    label.style.overflow = "visible";
-    label.style.textOverflow = "unset";
-    label.style.width = "auto";
-  });
+// 2. TEMP: Expand label widths and disable truncation
+const labels = document.querySelectorAll(".labels span");
+labels.forEach(label => {
+  label.dataset.originalStyle = label.getAttribute("style") || "";
+  label.style.whiteSpace = "normal";
+  label.style.overflow = "visible";
+  label.style.textOverflow = "unset";
+  label.style.width = "auto";
+  label.style.display = "inline-block";
+  label.style.textAlign = "center";
+  label.style.fontSize = "1rem"; // Ensure readable
+});
+
 
   try {
     const canvas = await html2canvas(box, { scale: 2, useCORS: true });
