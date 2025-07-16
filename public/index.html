@@ -215,7 +215,7 @@ document.getElementById("model-info").textContent = `Model: ${data.model}`;
 document.getElementById("shareBtn").onclick = async () => {
   const box = document.querySelector(".translator-box");
 
-  // 1. TEMP: Show a footer caption inside the translator box
+  // 1. Add caption to bottom
   const caption = document.createElement("div");
   caption.textContent = "Translated using https://genz-translator.xyz ✨";
   caption.style.cssText = `
@@ -226,37 +226,35 @@ document.getElementById("shareBtn").onclick = async () => {
   `;
   box.appendChild(caption);
 
+  // 2. Temporarily expand labels for long text
+  const labels = document.querySelectorAll(".labels span");
+  labels.forEach(label => {
+    label.dataset.originalStyle = label.getAttribute("style") || "";
+    label.style.display = "inline-block";
+    label.style.whiteSpace = "normal";
+    label.style.overflow = "visible";
+    label.style.textOverflow = "unset";
+    label.style.maxWidth = "45%";
+    label.style.wordBreak = "break-word";
+    label.style.lineHeight = "1.2";
+    label.offsetHeight; // Force reflow
+  });
 
-// 2. TEMP: Expand label widths and disable truncation
-const labels = document.querySelectorAll(".labels span");
-labels.forEach(label => {
-  // Save original inline style if any
-  label.dataset.originalStyle = label.getAttribute("style") || "";
-
-  // Force block display so html2canvas renders it correctly
-  label.style.display = "inline-block";
-  label.style.whiteSpace = "normal";
-  label.style.overflow = "visible";
-  label.style.textOverflow = "unset";
-  label.style.maxWidth = "45%";
-  label.style.wordBreak = "break-word";
-  label.style.lineHeight = "1.2";
-});
-
-
+  // 3. Short delay to ensure styles applied before rendering
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   try {
     const canvas = await html2canvas(box, { scale: 2, useCORS: true });
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
     const file = new File([blob], "genz_translation.png", { type: "image/png" });
 
-    // 3. Clean up caption and label style
+    // 4. Clean up styles and caption
     caption.remove();
     labels.forEach(label => {
       label.setAttribute("style", label.dataset.originalStyle);
     });
 
-    // 4. Share if available
+    // 5. Share or download fallback
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
         title: "Gen Z Translator",
@@ -264,7 +262,6 @@ labels.forEach(label => {
         files: [file],
       });
     } else {
-      // Fallback: Download image
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -277,6 +274,7 @@ labels.forEach(label => {
     console.error(err);
   }
 };
+
 
 
 
