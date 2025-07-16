@@ -165,7 +165,7 @@ footer {
 }
 
 .title-logo {
-  height: 1.2em; /* about half of the title text size */
+  height: 1.2em;
   
 
 }
@@ -239,14 +239,15 @@ footer {
   bottom: 10px;
   right: 10px;
   z-index: 5;
-  padding: 6px 10px;
-  font-size: 14px;
+  padding: 6px 6px;
+  font-size: 16px;
   border: none;
   background: var(--card);
   cursor: pointer;
   border-radius: 4px;
   opacity: 0.85;
   transition: opacity 0.2s ease;
+
 }
 
 #copyBtn:hover {
