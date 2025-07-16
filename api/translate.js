@@ -22,7 +22,7 @@ const openrouterModels = [
 const huggingfaceModels = [
   'mistralai/Mistral-Small-3.1-Instruct',
   'mistralai/Mistral-7B-Instruct',
-  'mistralai/Codestral-Mamba-7B-Instruct'
+  'moonshotai/Kimi-K2-Instruct'
 ];
 
 

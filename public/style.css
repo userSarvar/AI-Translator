@@ -200,7 +200,7 @@ footer {
 }
 
 [data-theme="dark"] .toggle-icon {
-  background-image: url("moon11.svg"); /* Dark mode icon */
+  background-image: url("moon11.svg");
 }
 
 
@@ -261,7 +261,6 @@ footer {
   cursor: pointer;
   width: 100%;
 }
-/* Adjust translator box on small screens */
 @media (max-width: 600px) {
   .translator-box {
     padding: 1rem;
@@ -302,7 +301,7 @@ footer {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 9999; /* ← super high priority */
+  z-index: 9999; 
   display: flex;
   flex-direction: column;
   align-items: center;
