@@ -215,28 +215,56 @@ document.getElementById("model-info").textContent = `Model: ${data.model}`;
 document.getElementById("shareBtn").onclick = async () => {
   const box = document.querySelector(".translator-box");
 
-  // 👇 Temporarily hide buttons (optional)
-  const copyBtn = document.getElementById("copyBtn");
-  const shareBtn = document.getElementById("shareBtn");
-  copyBtn.style.visibility = "hidden";
-  shareBtn.style.visibility = "hidden";
+  // 1. TEMP: Show a footer caption inside the translator box
+  const caption = document.createElement("div");
+  caption.textContent = "Translated using https://genz-translator.xyz ✨";
+  caption.style.cssText = `
+    margin-top: 12px;
+    font-size: 0.9rem;
+    color: gray;
+    text-align: center;
+  `;
+  box.appendChild(caption);
+
+
+// 2. TEMP: Expand label widths and disable truncation
+const labels = document.querySelectorAll(".labels span");
+labels.forEach(label => {
+  // Save original inline style if any
+  label.dataset.originalStyle = label.getAttribute("style") || "";
+
+  // Force block display so html2canvas renders it correctly
+  label.style.display = "inline-block";
+  label.style.whiteSpace = "normal";
+  label.style.overflow = "visible";
+  label.style.textOverflow = "unset";
+  label.style.maxWidth = "45%";
+  label.style.wordBreak = "break-word";
+  label.style.lineHeight = "1.2";
+});
+
+
 
   try {
     const canvas = await html2canvas(box, { scale: 2, useCORS: true });
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
     const file = new File([blob], "genz_translation.png", { type: "image/png" });
 
-    // 👇 Show buttons again after capture
-    copyBtn.style.visibility = "visible";
-    shareBtn.style.visibility = "visible";
+    // 3. Clean up caption and label style
+    caption.remove();
+    labels.forEach(label => {
+      label.setAttribute("style", label.dataset.originalStyle);
+    });
 
+    // 4. Share if available
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
         title: "Gen Z Translator",
-        text: "Check out this translation from https://genz-translator.xyz ✨",
+        text: "Check out the translation I made with https://genz-translator.xyz!",
         files: [file],
       });
     } else {
+      // Fallback: Download image
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -247,12 +275,8 @@ document.getElementById("shareBtn").onclick = async () => {
   } catch (err) {
     showAlert("Sharing failed. Try again.", "warning");
     console.error(err);
-    // restore buttons if error happens
-    copyBtn.style.visibility = "visible";
-    shareBtn.style.visibility = "visible";
   }
 };
-
 
 
 
