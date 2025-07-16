@@ -213,22 +213,22 @@ document.getElementById("shareBtn").onclick = async () => {
 
   try {
     const canvas = await html2canvas(box, {
-      scale: 2,  // High res
-      useCORS: true
+      scale: 2,
+      useCORS: true,
     });
 
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
     const file = new File([blob], "genz_translation.png", { type: "image/png" });
 
-    // 📱 If Web Share API is supported
+    const caption = `Check out this Gen Z translation I made! 🤖\nTry it yourself at https://genz-translator.xyz/`;
+
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
         title: "Gen Z Translator",
-        text: "Check out my translation!",
+        text: caption,
         files: [file],
       });
     } else {
-      // 🌐 Fallback: download image
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -237,10 +237,11 @@ document.getElementById("shareBtn").onclick = async () => {
       URL.revokeObjectURL(url);
     }
   } catch (err) {
-    showAlert('Sharing failed. Try again.', 'warning');
+    showAlert("Sharing failed. Try again.", "warning");
     console.error(err);
   }
 };
+
 
 
 function showAlert(message, type = 'info') {
