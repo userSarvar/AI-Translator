@@ -215,52 +215,20 @@ document.getElementById("model-info").textContent = `Model: ${data.model}`;
 document.getElementById("shareBtn").onclick = async () => {
   const box = document.querySelector(".translator-box");
 
-  // 1. TEMP: Show a footer caption inside the translator box
-  const caption = document.createElement("div");
-  caption.textContent = "Translated using https://genz-translator.xyz ✨";
-  caption.style.cssText = `
-    margin-top: 12px;
-    font-size: 0.9rem;
-    color: gray;
-    text-align: center;
-  `;
-  box.appendChild(caption);
-
-  // 2. TEMP: Expand label widths and disable truncation
-// 2. TEMP: Expand label widths and disable truncation
-const labels = document.querySelectorAll(".labels span");
-labels.forEach(label => {
-  label.dataset.originalStyle = label.getAttribute("style") || "";
-  label.style.whiteSpace = "normal";
-  label.style.overflow = "visible";
-  label.style.textOverflow = "unset";
-  label.style.width = "auto";
-  label.style.display = "inline-block";
-  label.style.textAlign = "center";
-  label.style.fontSize = "1rem"; // Ensure readable
-});
-
-
   try {
     const canvas = await html2canvas(box, { scale: 2, useCORS: true });
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
     const file = new File([blob], "genz_translation.png", { type: "image/png" });
 
-    // 3. Clean up caption and label style
-    caption.remove();
-    labels.forEach(label => {
-      label.setAttribute("style", label.dataset.originalStyle);
-    });
-
-    // 4. Share if available
+    // Share if available
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
         title: "Gen Z Translator",
-        text: "Check out the translation I made with https://genz-translator.xyz!",
+        text: "Check out the translation I made: https://genz-translator.xyz ✨",
         files: [file],
       });
     } else {
-      // Fallback: Download image
+      // Fallback: Download
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -273,6 +241,7 @@ labels.forEach(label => {
     console.error(err);
   }
 };
+
 
 
 
