@@ -229,25 +229,31 @@ footer {
 
 
 
+.textarea-container {
+  position: relative;
+  width: 100%;
+}
+
 #copyBtn {
   position: absolute;
-  bottom: 12px;
-  right: 12px;
-  z-index: 10;
+  bottom: 10px;
+  right: 10px;
+  z-index: 5;
   padding: 6px 10px;
   font-size: 14px;
   border: none;
   background: var(--button-bg, #ccc);
   cursor: pointer;
   border-radius: 4px;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
 }
-
-
 
 #copyBtn:hover {
   color: var(--accent);
   opacity: 1;
 }
+
 
 
 #shareBtn {
