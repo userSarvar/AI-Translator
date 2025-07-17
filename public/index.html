@@ -136,12 +136,16 @@
     </div>
 
     <section class="about-site">
-      <h2>What is GenZ Translator?</h2>
-      <p>
-        GenZ Translator helps you convert phrases between formal English and Gen Z slang using AI. 
-        Whether you're a teacher, parent, or teen, it's a fun way to understand modern communication styles.
-      </p>
+      <button class="toggle-about" onclick="toggleAbout()">ℹ️ About this site</button>
+      <div id="aboutContent" class="about-content collapsed">
+        <h2>What is GenZ Translator?</h2>
+        <p>
+          GenZ Translator helps you convert phrases between formal English and Gen Z slang using AI.
+          Whether you're a teacher, parent, or teen, it's a fun way to understand modern communication styles.
+        </p>
+      </div>
     </section>
+
 
 
   </main>
@@ -313,6 +317,12 @@ function showAlert(message, type = 'info') {
   setTimeout(() => alert.classList.add('show'), 10); // for animation
 
 }
+// for read more descriprion
+function toggleAbout() {
+  const content = document.getElementById('aboutContent');
+  content.classList.toggle('collapsed');
+}
+
 
 
   </script>

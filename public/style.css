@@ -339,22 +339,54 @@ footer {
 
 .about-site {
   max-width: 800px;
-  margin: 40px auto 60px auto;
-  padding: 20px 30px;
-  border-radius: 12px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+}
+
+.toggle-about {
+  background-color: var(--about-toggle-bg);
+  color: var(--about-toggle-text);
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease;
+}
+
+.toggle-about:hover {
+  background-color: var(--about-toggle-bg-hover);
+}
+
+.about-content {
+  margin-top: 20px;
+  padding: 20px;
   background-color: var(--about-bg);
   color: var(--about-text);
+  border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
-  font-family: 'Inter', sans-serif;
+  max-height: 500px;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  opacity: 1;
 }
 
-.about-site h2 {
-  font-size: 1.6rem;
-  margin-bottom: 12px;
+.about-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding: 0;
+  pointer-events: none;
 }
 
-.about-site p {
+.about-content h2 {
+  margin-bottom: 10px;
+  font-size: 1.4rem;
+}
+
+.about-content p {
   font-size: 1rem;
   line-height: 1.6;
 }
@@ -363,10 +395,16 @@ footer {
 :root {
   --about-bg: #f9f9f9;
   --about-text: #333;
+  --about-toggle-bg: #eaeaea;
+  --about-toggle-text: #333;
+  --about-toggle-bg-hover: #ddd;
 }
 
 /* Dark mode colors */
 body.dark-mode {
   --about-bg: #1e1e1e;
   --about-text: #ddd;
+  --about-toggle-bg: #333;
+  --about-toggle-text: #f0f0f0;
+  --about-toggle-bg-hover: #444;
 }
