@@ -334,3 +334,39 @@ footer {
   transform: translateY(-20px);
   opacity: 0;
 }
+
+
+
+.about-site {
+  max-width: 800px;
+  margin: 40px auto 60px auto;
+  padding: 20px 30px;
+  border-radius: 12px;
+  background-color: var(--about-bg);
+  color: var(--about-text);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.about-site h2 {
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+}
+
+.about-site p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Light mode colors */
+:root {
+  --about-bg: #f9f9f9;
+  --about-text: #333;
+}
+
+/* Dark mode colors */
+body.dark-mode {
+  --about-bg: #1e1e1e;
+  --about-text: #ddd;
+}
